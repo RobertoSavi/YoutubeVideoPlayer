@@ -1,8 +1,8 @@
 #ifndef __VARS_H__
 #define __VARS_H__
 
-extern volatile uint16_t time;
-extern uint16_t timeMax;
+extern volatile int time;
+extern volatile int timeMax;
 extern volatile uint16_t volume;
 extern volatile uint8_t volumeDelay;
 extern volatile uint16_t volumeMute;
@@ -15,8 +15,8 @@ extern volatile uint8_t menuSelect;
 extern volatile uint8_t TXData;
 extern volatile uint8_t RXData;
 extern volatile char receiveData[50];
-extern char duration[50];
-extern char title[50];
+extern uint8_t duration[10];
+extern uint8_t title[100];
 extern volatile uint8_t count;
 extern volatile uint8_t ack;
 extern volatile bool durationReceived;

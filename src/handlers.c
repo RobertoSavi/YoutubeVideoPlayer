@@ -259,7 +259,7 @@ void EUSCIA2_IRQHandler(void)
     {
 
         RXData = UART_receiveData(EUSCI_A2_BASE);
-        if (RXData != '‰')
+        if (RXData != '#')
         {
 
             if (!durationReceived)
@@ -283,6 +283,7 @@ void EUSCIA2_IRQHandler(void)
             if (!durationReceived)
             {
                 duration[count] = '\0';  // Null-terminate the string
+                //sendUART(duration);
                 timeMax = atoi(duration); // Convert string to integer
                 durationReceived = true;
             }
@@ -291,6 +292,8 @@ void EUSCIA2_IRQHandler(void)
                 title[count] = '\0'; // Null-terminate the string
                 gotInfo = true;
                 durationReceived = false;
+                Graphics_clearDisplay(&g_sContext);
+                _graphics();
             }
             count = 0; // Reset count for next input
         }
@@ -298,6 +301,7 @@ void EUSCIA2_IRQHandler(void)
         GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
         GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
         GPIO_setOutputHighOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+
         Interrupt_disableSleepOnIsrExit();
     }
 }
@@ -313,8 +317,7 @@ void TA0_N_IRQHandler()
         {
             showProgressBar();
             sprintf(string[0], "Time: %3d/%3d", time, timeMax);
-            Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 15,
-                                        64, 70, OPAQUE_TEXT);
+            Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 15, 64, 70, OPAQUE_TEXT);
         }
 
         if (time == timeMax)

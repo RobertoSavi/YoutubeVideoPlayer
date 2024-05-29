@@ -6,8 +6,8 @@
 #include "vars.h"
 
 
-volatile uint16_t time=0;
-uint16_t timeMax=0;
+volatile int time=0;
+volatile int timeMax=0;
 volatile uint16_t volume=100;
 volatile uint8_t volumeDelay=0;
 volatile uint16_t volumeMute;
@@ -20,8 +20,8 @@ volatile uint8_t menuSelect=0;
 volatile uint8_t TXData=1;
 volatile uint8_t RXData=0;
 volatile char receiveData[50];
-char duration[50]="";
-char title[50]="";
+uint8_t duration[10]="";
+uint8_t title[100]="";
 volatile uint8_t count=0;
 volatile uint8_t ack=1;
 volatile bool durationReceived=false;

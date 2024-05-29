@@ -91,19 +91,32 @@ const char *HTML_CONTENT = R"=====(
     var lista = [];
     var url;
 
+    var video;
+
     // This function creates an <iframe> (and YouTube player) after the API code downloads and opens a websocket connection
     function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        height: '720',
-        width: '1280',
-        playerVars: {
-                    listType: 'playlist',
-                    list: url
-                },
-        events: {
-          'onReady': onPlayerReady,
-        }
-      });
+      if(video == "playlist"){
+        player = new YT.Player('player', {
+          height: '720',
+          width: '1280',
+          playerVars: {
+                      listType: 'playlist',
+                      list: url
+                  },
+          events: {
+            'onReady': onPlayerReady,
+          }
+        });
+      }else if (video == "video"){
+        player = new YT.Player('player', {
+          height: '720',
+          width: '1280',
+          videoId: url,
+          events: {
+            'onReady': onPlayerReady,
+          }
+        });
+      }
 
       ws = new WebSocket("ws://" + window.location.host + ":81");
       ws.onmessage = ws_onmessage;
@@ -255,7 +268,12 @@ const char *HTML_CONTENT = R"=====(
         event.preventDefault();
         var userInput = document.getElementById('userInput').value;
         url = userInput.split('=')[2];
-
+        if (url == undefined){
+          video = "video";
+          url = userInput.split('=')[1];
+        }else{
+          video = "playlist";
+        }
         // This code loads the IFrame Player API code asynchronously.
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";

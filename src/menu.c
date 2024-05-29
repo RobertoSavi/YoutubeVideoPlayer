@@ -41,12 +41,28 @@ void previousVideo()
 {
     char str[7]="prev.";
     sendUART(str);
+    playing=0;
+    time=0;
+    gotInfo=false;
+
+    // Turn on red LED
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P2, RED_LED_PIN);
 }
 
 void nextVideo()
 {
     char str[7]="next.";
     sendUART(str);
+    playing=0;
+    time=0;
+    gotInfo=false;
+
+    // Turn on red LED
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P2, RED_LED_PIN);
 }
 
 void lowerSpeed()

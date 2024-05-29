@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include "vars.h"
 
-
 volatile int time=0;
 volatile int timeMax=0;
 volatile uint16_t volume=100;

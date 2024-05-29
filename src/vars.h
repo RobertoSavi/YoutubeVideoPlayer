@@ -1,6 +1,10 @@
 #ifndef __VARS_H__
 #define __VARS_H__
 
+#define RED_LED_PIN GPIO_PIN0
+#define GREEN_LED_PIN GPIO_PIN1
+#define BLUE_LED_PIN GPIO_PIN2
+
 extern volatile int time;
 extern volatile int timeMax;
 extern volatile uint16_t volume;

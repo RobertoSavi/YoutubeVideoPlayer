@@ -12,10 +12,6 @@
 #include <stdint.h>  // For uint16_t
 #include <errno.h>   // For errno
 
-#define RED_LED_PIN GPIO_PIN0
-#define GREEN_LED_PIN GPIO_PIN1
-#define BLUE_LED_PIN GPIO_PIN2
-
 void sendUART(char *str)
 {
     while (*str != '\0')
@@ -294,13 +290,16 @@ void EUSCIA2_IRQHandler(void)
                 durationReceived = false;
                 Graphics_clearDisplay(&g_sContext);
                 _graphics();
+                playing=1;
+                Interrupt_enableInterrupt(INT_TA0_N);
+
+                // Turn on blue LED for debug
+                GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
+                GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+                GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
             }
             count = 0; // Reset count for next input
         }
-        // Turn on blue LED for debug
-        GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
-        GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
-        GPIO_setOutputHighOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
 
         Interrupt_disableSleepOnIsrExit();
     }

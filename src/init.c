@@ -10,10 +10,6 @@
 #include "handlers.h"
 #include "init.h"
 
-#define RED_LED_PIN GPIO_PIN0
-#define GREEN_LED_PIN GPIO_PIN1
-#define BLUE_LED_PIN GPIO_PIN2
-
 void _buttonsInit()
 {
     /* clean voltage in button */
@@ -45,13 +41,6 @@ void _buttonsInit()
     GPIO_clearInterruptFlag(GPIO_PORT_P3, status);
 
     GPIO_setAsOutputPin(GPIO_PORT_P2, RED_LED_PIN | GREEN_LED_PIN | BLUE_LED_PIN);
-
-    // Turn off green and blue LEDs
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
-
-    // Turn on red LED
-    GPIO_setOutputHighOnPin(GPIO_PORT_P2, RED_LED_PIN);
 
     /* activate interrupt notification */
     Interrupt_enableMaster();
@@ -147,35 +136,6 @@ void _clocksInit()
 
 int _connectionInit()
 {
-    //sendUART("ready.");
-
-    while(!gotInfo)
-    {
-    }
-
-    /*if(0 )
-    {
-        _failedGraphics();
-
-        return 1;
-    }*/
-
-    //timeMax=200; // actual time
-    //title="Put title here"; // actual title
-    playing=1;
-    Interrupt_enableInterrupt(INT_TA0_N);
-
-    //Graphics_clearDisplay(&g_sContext);
-    //_graphics();
-
-    // Turn off red and blue LEDs
-    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
-    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
-
-    // Turn on green LED
-    //GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
-
-    return 0;
 }
 
 void _hwInit()
@@ -199,10 +159,15 @@ void _hwInit()
     CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
     CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
+    // Turn on red LED
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P2, RED_LED_PIN);
+
     _graphicsInit();
     _buttonsInit();
     _adcInit();
     _UARTInit();
     _clocksInit();
-    _connectionInit();
+    //_connectionInit();
 }

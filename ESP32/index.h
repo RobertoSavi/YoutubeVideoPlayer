@@ -136,13 +136,14 @@ const char *HTML_CONTENT = R"=====(
         duration: duration,
         title: title
       };
-      console.log(message);
+      console.log(JSON.stringify(message))
       ws.send(JSON.stringify(message)); // Send message via WebSocket
     }
 
     // The API will call this function when the video player is ready.
     function onPlayerReady(event) {
       event.target.playVideo();
+      sendVideoInfo();
     }
 
     // When a message arrives through the websocket, it is pushed into the list
@@ -238,10 +239,12 @@ const char *HTML_CONTENT = R"=====(
                   
         case "prev":
           player.previousVideo();
+          setTimeout(sendVideoInfo, 2000);
           break;
 
         case "next":
           player.nextVideo();
+          setTimeout(sendVideoInfo, 2000);
           break;
 
         case "lSpee":

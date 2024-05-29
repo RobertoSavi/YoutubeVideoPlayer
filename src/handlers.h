@@ -6,6 +6,7 @@ void ADC14_IRQHandler();
 void PORT4_IRQHandler();
 void PORT5_IRQHandler();
 void PORT3_IRQHandler();
+//uint16_t myAtoi();
 void EUSCIA2_IRQHandler();
 void TA0_N_IRQHandler();
 

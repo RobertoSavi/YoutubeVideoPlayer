@@ -2,7 +2,7 @@
 #define __VARS_H__
 
 extern volatile uint16_t time;
-extern volatile uint16_t timeMax;
+extern uint16_t timeMax;
 extern volatile uint16_t volume;
 extern volatile uint8_t volumeDelay;
 extern volatile uint16_t volumeMute;
@@ -11,10 +11,16 @@ extern volatile uint8_t timeDelay;
 extern volatile uint8_t playing;
 extern volatile uint8_t menuOpen;
 extern volatile uint8_t menuSelect;
-extern volatile char* title;
+
 extern volatile uint8_t TXData;
 extern volatile uint8_t RXData;
 extern volatile char receiveData[50];
+extern char duration[50];
+extern char title[50];
+extern volatile uint8_t count;
+extern volatile uint8_t ack;
+extern volatile bool durationReceived;
+extern volatile bool gotInfo;
 
 extern const uint8_t posBarraX;
 extern const uint8_t posBarraY;

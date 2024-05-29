@@ -5,8 +5,9 @@
 #include <stdio.h>
 #include "vars.h"
 
+
 volatile uint16_t time=0;
-volatile uint16_t timeMax=0;
+uint16_t timeMax=0;
 volatile uint16_t volume=100;
 volatile uint8_t volumeDelay=0;
 volatile uint16_t volumeMute;
@@ -15,10 +16,16 @@ volatile uint8_t timeDelay=0;
 volatile uint8_t playing=0;
 volatile uint8_t menuOpen=0;
 volatile uint8_t menuSelect=0;
-volatile char* title="Waiting for connection...";
+
 volatile uint8_t TXData=1;
 volatile uint8_t RXData=0;
 volatile char receiveData[50];
+char duration[50]="";
+char title[50]="";
+volatile uint8_t count=0;
+volatile uint8_t ack=1;
+volatile bool durationReceived=false;
+volatile bool gotInfo=false;
 
 const uint8_t posBarraX=29;
 const uint8_t posBarraY=113;

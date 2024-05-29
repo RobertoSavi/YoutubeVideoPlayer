@@ -3,6 +3,7 @@
 #include <ti/grlib/grlib.h>
 #include "src/LcdDriver/Crystalfontz128x128_ST7735.h"
 #include <stdio.h>
+#include <string.h>
 #include "graphics.h"
 #include "menu.h"
 #include "vars.h"
@@ -148,32 +149,31 @@ int _connectionInit()
 {
     //sendUART("ready.");
 
-    while(0 /* receiving data */)
+    while(!gotInfo)
     {
-        /* receive data */
     }
 
-    if(0 /* data not received */)
+    /*if(0 )
     {
         _failedGraphics();
 
         return 1;
-    }
+    }*/
 
-    timeMax=200; // actual time
-    title="Put title here"; // actual title
+    //timeMax=200; // actual time
+    //title="Put title here"; // actual title
     playing=1;
     Interrupt_enableInterrupt(INT_TA0_N);
 
-    Graphics_clearDisplay(&g_sContext);
-    _graphics();
+    //Graphics_clearDisplay(&g_sContext);
+    //_graphics();
 
     // Turn off red and blue LEDs
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
+    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
 
     // Turn on green LED
-    GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
+    //GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
 
     return 0;
 }

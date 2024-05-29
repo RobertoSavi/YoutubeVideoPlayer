@@ -152,6 +152,20 @@ This project is a Youtube remote controller, allowing you to pause, play, mute, 
 
 
 ## Contributors
+### Roberto Savi
+* UART Communication
+* Clock and timers synchronization
+* WiFi Communication
+### Merak Winston Hall
+* Websocket connection
+* WiFi communication
+* Web server part
+### Diamand Muka
+* Web server part
+* WiFi communication
+### Lorenzo Midiri
+
+
 
 
 ## Contacts

@@ -80,6 +80,7 @@
     var wsm_max_len = 4096;
     var lista = [];
     var url;
+    var ws;
 
     var video;
 
@@ -108,7 +109,7 @@
         });
       }
 
-      const ws = new WebSocket(`ws://${window.location.host}`);
+      ws = new WebSocket(`ws://${window.location.host}`);
       ws.onmessage = ws_onmessage;
     }
 

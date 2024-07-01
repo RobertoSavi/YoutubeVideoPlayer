@@ -5,6 +5,8 @@ const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 
+var messaggi = [];
+
 // Serve il file HTML dalla directory "public"
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -15,13 +17,31 @@ const server = app.listen(port, () => {
 
 // Crea il server WebSocket
 const wss = new Server({ server });
+const wss2 = new Server({ port: 8080 });
 
 wss.on("connection", (ws) => {
   console.log("New client connected");
 
   ws.on("message", (message) => {
-    console.log(`Received message: ${message}`);
-    ws.send(`Server received: ${message}`);
+    console.log(`${message}`);
+    wss2.clients.forEach((client) => {
+      client.send(`${message}`);
+    });
+  });
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
+  });
+});
+
+wss2.on("connection", (ws) => {
+  console.log("New client connected");
+
+  ws.on("message", (message) => {
+    console.log(`${message}`);
+    wss.clients.forEach((client) => {
+      client.send(`${message}`);
+    });
   });
 
   ws.on("close", () => {

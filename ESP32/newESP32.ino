@@ -1,25 +1,17 @@
 #include "WiFi.h"
 #include "HTTPClient.h"
-// #include <ArduinoJson.h>
-// #include <Arduino_JSON.h>
-#include <string.h>
-#include <ESPAsyncWebServer.h>
 #include <WebSocketsClient.h>
-#include "index.h"
+#include <string.h>
 
 #define RX 16 // goes to 3.3
 #define TX 17 // goes to 3.2
 #define INTERNET_ACTIVE 1
 
-// const char *ssid = "iPhone di Merak"; // insert here
-// const char *password = "carmen123";   // insert here
 const char *ssid = "Roberto's Galaxy A52s 5G"; // insert here
 const char *password = "aibohphobia";          // insert here
-const char *ws_server_host = "16.171.133.32";
-
 const int baud_rate = 115200;
 
-WebSocketsClient webSocket;
+WebSocketsClient webSocket; // Create a WebSocket client object
 
 String request;
 char charRequest[100];
@@ -31,17 +23,13 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t length)
     switch (type)
     {
     case WStype_DISCONNECTED:
-        Serial.println("WebSocket disconnected");
+        Serial.println("WebSocket Disconnected");
         break;
     case WStype_CONNECTED:
-        Serial.println("WebSocket connected");
+        Serial.println("WebSocket Connected");
         break;
     case WStype_TEXT:
-        Serial.printf("Received message: %s\n", payload);
-        // Puoi gestire qui il messaggio ricevuto dal server
-        break;
-    case WStype_BIN:
-        Serial.println("Binary message received (not handled)");
+        Serial.printf("Received text: %s\n", payload);
         break;
     }
 }
@@ -53,7 +41,7 @@ void setup()
 {
     Serial.begin(baud_rate);
     Serial2.begin(baud_rate, SERIAL_8N1, RX, TX); // define serial channel
-    // Disconnect from previous AP
+
     if (INTERNET_ACTIVE)
     {
         WiFi.mode(WIFI_STA);
@@ -62,17 +50,22 @@ void setup()
         scanWiFi(); // checks WiFi APs available
         initWiFi(); // connect to desired AP
     }
-    // Initialize WebSocket server
-    webSocket.begin(ws_server_host, 5000, "/");
-    webSocket.onEvent(webSocketEvent);
-    webSocket.setReconnectInterval(5000);
 
+    // Initialize WebSocket client and set event handler
+    webSocket.begin("16.171.133.32", 5000, "/");
+    webSocket.onEvent(webSocketEvent);
+    webSocket.setReconnectInterval(5000); // Try to reconnect every 5s if disconnected
+
+    Serial.print("ESP32 connected to WebSocket server with IP address: ");
+    Serial.println(WiFi.localIP());
     Serial.println("Setup completed");
+    s
 }
 
 void loop()
 {
     webSocket.loop();
+
     while (Serial2.available())
     {
         int length = Serial2.readBytesUntil('\0', charRequest, 100);
@@ -85,70 +78,54 @@ void loop()
             {
                 if (strcmp(token, "volUp") == 0)
                 {
-                    webSocket.sendTXT(0, "volUp");
+                    webSocket.sendTXT("volUp");
                 }
                 else if (strcmp(token, "volDown") == 0)
                 {
-                    webSocket.sendTXT(0, "volDown");
+                    webSocket.sendTXT("volDown");
                 }
                 else if (strcmp(token, "timePlus") == 0)
                 {
-                    webSocket.sendTXT(0, "timePlus");
+                    webSocket.sendTXT("timePlus");
                 }
                 else if (strcmp(token, "timeMinus") == 0)
                 {
-                    webSocket.sendTXT(0, "timeMinus");
+                    webSocket.sendTXT("timeMinus");
                 }
                 else if (strcmp(token, "pause") == 0)
                 {
-                    webSocket.sendTXT(0, "pause");
+                    webSocket.sendTXT("pause");
                 }
                 else if (strcmp(token, "play") == 0)
                 {
-                    webSocket.sendTXT(0, "play");
+                    webSocket.sendTXT("play");
                 }
                 else if (strcmp(token, "mute") == 0)
                 {
-                    webSocket.sendTXT(0, "mute");
+                    webSocket.sendTXT("mute");
                 }
                 else if (strcmp(token, "unmute") == 0)
                 {
-                    webSocket.sendTXT(0, "unmute");
+                    webSocket.sendTXT("unmute");
                 }
                 else if (strcmp(token, "prev") == 0)
                 {
-                    webSocket.sendTXT(0, "prev");
+                    webSocket.sendTXT("prev");
                 }
                 else if (strcmp(token, "next") == 0)
                 {
-                    webSocket.sendTXT(0, "next");
+                    webSocket.sendTXT("next");
                 }
                 else if (strcmp(token, "lSpee") == 0)
                 {
-                    webSocket.sendTXT(0, "lSpee");
+                    webSocket.sendTXT("lSpee");
                 }
                 else if (strcmp(token, "hSpee") == 0)
                 {
-                    webSocket.sendTXT(0, "hSpee");
+                    webSocket.sendTXT("hSpee");
                 }
             }
             token = strtok(NULL, s);
-        }
-    }
-}
-
-void sendString(String send)
-{
-    for (int i = 0; i < send.length(); i++)
-    {
-        c = send.charAt(i);
-        Serial2.write(c);
-        timer--;
-        if (timer == 0)
-        {
-            String tmp = Serial2.readStringUntil('%');
-            Serial.println(tmp);
-            timer = 1;
         }
     }
 }
@@ -164,7 +141,6 @@ void scanWiFi()
     else
     {
         Serial.println("Network found");
-        // Print all APs
         for (int i = 0; i < n; ++i)
         {
             Serial.print(i + 1);
@@ -187,6 +163,6 @@ void initWiFi()
         Serial.print('.');
         delay(1000);
     }
-    Serial.print("\n Connected to: ");
+    Serial.print("\nConnected to: ");
     Serial.println(WiFi.SSID());
 }

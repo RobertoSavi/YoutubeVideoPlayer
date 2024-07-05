@@ -3,7 +3,7 @@ const { Server } = require("ws");
 const path = require("path");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Serve il file HTML dalla directory "public"
 app.use(express.static(path.join(__dirname, "public")));
@@ -15,7 +15,7 @@ const server = app.listen(port, () => {
 
 // Crea il server WebSocket
 const wss = new Server({ server });
-const wss2 = new Server({ port: 8080 });
+const wss2 = new Server({ port: 3000 });
 
 wss.on("connection", (ws) => {
   console.log("New client connected");

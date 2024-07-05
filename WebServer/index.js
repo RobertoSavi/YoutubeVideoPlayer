@@ -5,8 +5,6 @@ const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 
-var messaggi = [];
-
 // Serve il file HTML dalla directory "public"
 app.use(express.static(path.join(__dirname, "public")));
 

@@ -147,8 +147,10 @@ void ADC14_IRQHandler()
     }
 }
 
+//Handler for the joystick button
 void PORT4_IRQHandler()
 {
+    //Clear of the interrupt flag and disable the interrupt
     GPIO_clearInterruptFlag(GPIO_PORT_P4, GPIO_PIN1);
     Interrupt_disableInterrupt(INT_PORT4);
 
@@ -156,8 +158,11 @@ void PORT4_IRQHandler()
     {
         if (!menuOpen)
         {
+            //If the menu is closed handle the playing of the video
             if (playing)
             {
+                //If the video is playing pause it, disable the timer that increases the video time every second
+                //and update the graphics
                 Interrupt_disableInterrupt(INT_TA0_N);
                 playing = 0;
                 char str[7] = "pause.";
@@ -166,6 +171,8 @@ void PORT4_IRQHandler()
             }
             else
             {
+                //If the video is paused play it, enable the timer that increases the video time every second
+                //and update the graphics
                 Interrupt_enableInterrupt(INT_TA0_N);
                 playing = 1;
                 char str[6] = "play.";
@@ -175,6 +182,8 @@ void PORT4_IRQHandler()
         }
         else
         {
+            //If the menu is open call the function that handles the menu option that is currently selected
+            //then close the menu and update the graphics
             _menuFunc(menuSelect);
             menuOpen = 0;
             menuSelect = 0;
@@ -184,8 +193,10 @@ void PORT4_IRQHandler()
     }
 }
 
+//Handler for the mute button
 void PORT5_IRQHandler()
 {
+    //Clear of the interrupt flag and disable the interrupt
     GPIO_clearInterruptFlag(GPIO_PORT_P5, GPIO_PIN1);
     Interrupt_disableInterrupt(INT_PORT5);
 
@@ -193,6 +204,7 @@ void PORT5_IRQHandler()
     {
         if (mute)
         {
+            //If the video is muted load the saved volume and unmute it
             volume = volumeMute;
             mute = 0;
             char str[8] = "unmute.";
@@ -200,6 +212,8 @@ void PORT5_IRQHandler()
         }
         else
         {
+            //If the video is unmuted save the current volume and set it as 0
+            //then unmute the video
             volumeMute = volume;
             volume = 0;
             mute = 1;
@@ -209,13 +223,16 @@ void PORT5_IRQHandler()
 
         if (!menuOpen)
         {
+            //If the menu is not open reload the graphics
             _graphics();
         }
     }
 }
 
+//Handler for the menu button
 void PORT3_IRQHandler()
 {
+    //Clear of the interrupt flag and disable the interrupt
     GPIO_clearInterruptFlag(GPIO_PORT_P3, GPIO_PIN5);
     Interrupt_disableInterrupt(INT_PORT3);
 
@@ -223,12 +240,14 @@ void PORT3_IRQHandler()
     {
         if (menuOpen)
         {
+            //If the menu is open close it and load the general graphics
             menuOpen = 0;
             Graphics_clearDisplay(&g_sContext);
             _graphics();
         }
         else
         {
+            //If the menu is closed open it and load the menu graphics
             menuOpen = 1;
             _menuGraphics(menuSelect);
         }
@@ -305,15 +324,19 @@ void EUSCIA2_IRQHandler(void)
     }
 }
 
+//Handler for the timer 0 (called every second)
 void TA0_N_IRQHandler()
 {
     Timer_A_clearInterruptFlag(TIMER_A0_BASE);
+
     if (time != timeMax && playing == 1)
     {
+        //If the video is playing and has not reached the maximum time increase the time by 1;
         time += 1;
 
         if (!menuOpen)
         {
+            //If the menu is not open update the progress bar and the time of the video
             showProgressBar();
             sprintf(string[0], "Time: %3d/%3d", time, timeMax);
             Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 15, 64, 70, OPAQUE_TEXT);
@@ -321,6 +344,7 @@ void TA0_N_IRQHandler()
 
         if (time == timeMax)
         {
+            //If the video reached the end pause it, disable the timer and update the graphics
             playing = 0;
             Interrupt_disableInterrupt(INT_TA0_N);
             _graphics();
@@ -328,8 +352,10 @@ void TA0_N_IRQHandler()
     }
 }
 
+//Handler for the timer 1 (called in less than a second)
 void TA1_N_IRQHandler()
 {
+    //Reset the delay for volume and time change and enable the buttons
     Timer_A_clearInterruptFlag(TIMER_A1_BASE);
     volumeDelay = 1;
     timeDelay = 1;
@@ -338,10 +364,12 @@ void TA1_N_IRQHandler()
     Interrupt_enableInterrupt(INT_PORT3);
 }
 
+//Handler for the timer 2 (called every second)
 void TA2_N_IRQHandler()
 {
     Timer_A_clearInterruptFlag(TIMER_A2_BASE);
 
+    //Modify the position of the title
     if (titlePos>0)
     {
         titlePos -= 10;
@@ -351,6 +379,7 @@ void TA2_N_IRQHandler()
         titlePos = 134;
     }
 
+    //If the menu is closed update the title
     if(!menuOpen)
     {
         _titleGraphics();

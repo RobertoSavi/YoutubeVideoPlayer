@@ -17,6 +17,7 @@ void _buttonsInit()
     GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN1);
     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN5);
 
+    //Set the buttons as pullup resistors and enable their interrupts
     GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P5,GPIO_PIN1);
     GPIO_enableInterrupt(GPIO_PORT_P5,GPIO_PIN1);
     GPIO_interruptEdgeSelect(GPIO_PORT_P5, GPIO_PIN1, GPIO_HIGH_TO_LOW_TRANSITION);
@@ -40,6 +41,7 @@ void _buttonsInit()
     status = GPIO_getEnabledInterruptStatus(GPIO_PORT_P3);
     GPIO_clearInterruptFlag(GPIO_PORT_P3, status);
 
+    //Set the led as an output pin
     GPIO_setAsOutputPin(GPIO_PORT_P2, RED_LED_PIN | GREEN_LED_PIN | BLUE_LED_PIN);
 
     /* activate interrupt notification */
@@ -78,6 +80,7 @@ void _graphicsInit()
     Graphics_setBackgroundColor(&g_sContext, 0xFFFFFF);
     GrContextFontSet(&g_sContext, &g_sFontFixed6x8);
 
+    //Clear the display and call connection graphics
     Graphics_clearDisplay(&g_sContext);
     _connectionGraphics();
 }
@@ -131,7 +134,7 @@ void _clocksInit()
     /* Enabling MASTER interrupts */
     Interrupt_enableMaster();
 
-    /* Starting the Timer_A0 in continuous mode */
+    /* Starting the timers in continuous mode */
     Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_CONTINUOUS_MODE);
     Timer_A_startCounter(TIMER_A1_BASE, TIMER_A_CONTINUOUS_MODE);
     Timer_A_startCounter(TIMER_A2_BASE, TIMER_A_CONTINUOUS_MODE);
@@ -167,6 +170,7 @@ void _hwInit()
     GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
     GPIO_setOutputHighOnPin(GPIO_PORT_P2, RED_LED_PIN);
 
+    //Call the other inits
     _graphicsInit();
     _buttonsInit();
     _adcInit();

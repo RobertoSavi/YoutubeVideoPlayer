@@ -353,7 +353,6 @@ void TA2_N_IRQHandler()
 
     if(!menuOpen)
     {
-        Graphics_drawStringCentered(&g_sContext, " ", 300, titlePos, 45, FONT_FMT_UNCOMPRESSED);
-        _graphics();
+        _titleGraphics();
     }
 }

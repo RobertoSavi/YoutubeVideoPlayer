@@ -41,6 +41,14 @@ void _graphics()
     }
 }
 
+void _titleGraphics()
+{
+    tRectangle whiteBar = {40, 0, 50, 130};
+    GrContextForegroundSet(&g_sContext, 0xffffff);
+    GrRectFill(&g_sContext, &whiteBars);
+    Graphics_drawStringCentered(&g_sContext, (int8_t*) title, AUTO_STRING_LENGTH, titlePos, 45, FONT_FMT_UNCOMPRESSED);
+}
+
 void _menuGraphics(uint8_t menuS)
 {
     Graphics_clearDisplay(&g_sContext);

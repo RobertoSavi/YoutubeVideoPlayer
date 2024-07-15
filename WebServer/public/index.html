@@ -65,11 +65,11 @@
 <body>
     
   <div class="top">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="logo" class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.>
     <h2 class="titolo">Youtube Controller</h2>
   </div>
   <form id="myForm" class="form">
-    <input class="searchBar" type="text" id="userInput" name="userInput" placeholder="Insert link" required>
+    <input class="searchBar" type="text" id="userInput" name="userInput" placeh>
     <button type="submit">Search</button>
   </form>
   <div id="player" class="player"></div>
@@ -85,7 +85,7 @@
     var video;
     var player;
 
-    // This function creates an <iframe> (and YouTube player) after the API code downloads and opens a websocket connection
+    // This function creates an <iframe> (and YouTube player) after the API cod>
     function onYouTubeIframeAPIReady() {
       if(video == "playlist"){
         player = new YT.Player('player', {
@@ -110,15 +110,15 @@
         });
       }
 
-      ws = new WebSocket(`ws://localhost:3000`);
+      ws = new WebSocket(`ws://16.171.133.32:3000`);
       ws.onmessage = ws_onmessage;
     }
 
 
     // Function to send video duration and title via WebSocket
     function sendVideoInfo() {
-      var duration = player.getDuration(); 
-      var title = player.getVideoData().title; 
+      var duration = player.getDuration();
+      var title = player.getVideoData().title;
       var message = {
         duration: duration,
         title: title
@@ -173,7 +173,7 @@
 
     function prevTime(actual_time){
       actual_time -= 10;
-      if (actual_time > 0){ 
+      if (actual_time > 0){
         player.seekTo(actual_time);
       }
       else{
@@ -199,11 +199,11 @@
         case "volUp":
           higherVolume(player.getVolume());
           break;
-                  
+
         case "timePlus":
           plusTime(player.getCurrentTime());
           break;
-              
+
         case "timeMinus":
           prevTime(player.getCurrentTime());
           break;
@@ -211,15 +211,15 @@
         case "pause":
           player.pauseVideo();
           break;
-                  
+
         case "play":
           player.playVideo();
           break;
-                  
+
         case "mute":
           player.mute();
           break;
-                  
+
         case "unmute":
           player.unMute();
           break;
@@ -237,7 +237,7 @@
         case "lSpee":
           lowerSpeed(player.getPlaybackRate());
           break;
-                  
+        
         case "hSpee":
           higherSpeed(player.getPlaybackRate());
           break;
@@ -253,7 +253,7 @@
     }, 250);
 
     // Function to save user input into variable and create iframe player with url
-    document.getElementById('myForm').addEventListener('submit', 
+    document.getElementById('myForm').addEventListener('submit',
       function(event) {
         event.preventDefault();
         var userInput = document.getElementById('userInput').value;

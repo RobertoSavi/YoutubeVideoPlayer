@@ -14,7 +14,7 @@
 
 void sendUART(char *str)
 {
-    while (str != '\0')
+    while (*str != '\0')
     {
         UART_transmitData(EUSCI_A2_BASE, *str);
         str++;
@@ -236,17 +236,17 @@ void PORT3_IRQHandler()
 }
 
 /*uint16_t myAtoi(const char* str) {
- int result = 0;
- int i = 0;
+    int result = 0;
+    int i = 0;
 
- // Process digits
- while (str[i] >= '0' && str[i] <= '9') {
- result = result * 10 + (str[i] - '0');
- i++;
- }
+    // Process digits
+    while (str[i] >= '0' && str[i] <= '9') {
+        result = result * 10 + (str[i] - '0');
+        i++;
+    }
 
- return result;
- }*/
+    return result;
+}*/
 
 void EUSCIA2_IRQHandler(void)
 {
@@ -268,18 +268,18 @@ void EUSCIA2_IRQHandler(void)
             }
             count++;
             /*ack--;
-             if (ack == 0)
-             {
-             UART_transmitData(EUSCI_A2_BASE, '%');
-             ack = 1;
-             }*/
+            if (ack == 0)
+            {
+                UART_transmitData(EUSCI_A2_BASE, '%');
+                ack = 1;
+            }*/
         }
         else
         {
             if (!durationReceived)
             {
                 duration[count] = '\0';  // Null-terminate the string
-                sendUART(duration);
+                //sendUART(duration);
                 timeMax = atoi(duration); // Convert string to integer
                 durationReceived = true;
             }
@@ -290,7 +290,7 @@ void EUSCIA2_IRQHandler(void)
                 durationReceived = false;
                 Graphics_clearDisplay(&g_sContext);
                 _graphics();
-                playing = 1;
+                playing=1;
                 Interrupt_enableInterrupt(INT_TA0_N);
 
                 // Turn on blue LED for debug
@@ -316,8 +316,7 @@ void TA0_N_IRQHandler()
         {
             showProgressBar();
             sprintf(string[0], "Time: %3d/%3d", time, timeMax);
-            Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 15,
-                                        64, 70, OPAQUE_TEXT);
+            Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 15, 64, 70, OPAQUE_TEXT);
         }
 
         if (time == timeMax)
@@ -343,7 +342,7 @@ void TA2_N_IRQHandler()
 {
     Timer_A_clearInterruptFlag(TIMER_A2_BASE);
 
-    if (titlePos > 0)
+    if (titlePos>0)
     {
         titlePos -= 10;
     }
@@ -352,7 +351,7 @@ void TA2_N_IRQHandler()
         titlePos = 134;
     }
 
-    if (!menuOpen)
+    if(!menuOpen)
     {
         _titleGraphics();
     }

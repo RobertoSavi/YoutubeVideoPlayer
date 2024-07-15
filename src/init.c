@@ -10,10 +10,6 @@
 #include "handlers.h"
 #include "init.h"
 
-#define RED_LED_PIN GPIO_PIN0
-#define GREEN_LED_PIN GPIO_PIN1
-#define BLUE_LED_PIN GPIO_PIN2
-
 void _buttonsInit()
 {
     /* clean voltage in button */
@@ -21,33 +17,20 @@ void _buttonsInit()
     GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN1);
     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN5);
 
-    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P5, GPIO_PIN1);
-    GPIO_enableInterrupt(GPIO_PORT_P5, GPIO_PIN1);
-    GPIO_interruptEdgeSelect(GPIO_PORT_P5, GPIO_PIN1,
-    GPIO_HIGH_TO_LOW_TRANSITION);
-    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P4, GPIO_PIN1);
-    GPIO_enableInterrupt(GPIO_PORT_P4, GPIO_PIN1);
-    GPIO_interruptEdgeSelect(GPIO_PORT_P4, GPIO_PIN1,
-    GPIO_HIGH_TO_LOW_TRANSITION);
-    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P3, GPIO_PIN5);
-    GPIO_enableInterrupt(GPIO_PORT_P3, GPIO_PIN5);
-    GPIO_interruptEdgeSelect(GPIO_PORT_P3, GPIO_PIN1,
-    GPIO_HIGH_TO_LOW_TRANSITION);
+    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P5,GPIO_PIN1);
+    GPIO_enableInterrupt(GPIO_PORT_P5,GPIO_PIN1);
+    GPIO_interruptEdgeSelect(GPIO_PORT_P5, GPIO_PIN1, GPIO_HIGH_TO_LOW_TRANSITION);
+    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P4,GPIO_PIN1);
+    GPIO_enableInterrupt(GPIO_PORT_P4,GPIO_PIN1);
+    GPIO_interruptEdgeSelect(GPIO_PORT_P4, GPIO_PIN1, GPIO_HIGH_TO_LOW_TRANSITION);
+    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P3,GPIO_PIN5);
+    GPIO_enableInterrupt(GPIO_PORT_P3,GPIO_PIN5);
+    GPIO_interruptEdgeSelect(GPIO_PORT_P3, GPIO_PIN1, GPIO_HIGH_TO_LOW_TRANSITION);
 
     /* registering to NVIC */
     Interrupt_enableInterrupt(INT_PORT5);
     Interrupt_enableInterrupt(INT_PORT4);
     Interrupt_enableInterrupt(INT_PORT3);
-
-    GPIO_setAsOutputPin(GPIO_PORT_P2,
-    RED_LED_PIN | GREEN_LED_PIN | BLUE_LED_PIN);
-
-    // Turn off green and blue LEDs
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
-
-    // Turn on red LED
-    GPIO_setOutputHighOnPin(GPIO_PORT_P2, RED_LED_PIN);
 
     /* clear interrupt flags */
     uint32_t status = GPIO_getEnabledInterruptStatus(GPIO_PORT_P5);
@@ -57,8 +40,7 @@ void _buttonsInit()
     status = GPIO_getEnabledInterruptStatus(GPIO_PORT_P3);
     GPIO_clearInterruptFlag(GPIO_PORT_P3, status);
 
-    GPIO_setAsOutputPin(GPIO_PORT_P2,
-    RED_LED_PIN | GREEN_LED_PIN | BLUE_LED_PIN);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, RED_LED_PIN | GREEN_LED_PIN | BLUE_LED_PIN);
 
     /* activate interrupt notification */
     Interrupt_enableMaster();
@@ -67,9 +49,7 @@ void _buttonsInit()
 void _UARTInit()
 {
     // Selecting P3.2 and P3.3 in UART mode and P1.0 as output (LED)
-    GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P3,
-    GPIO_PIN2 | GPIO_PIN3,
-                                               GPIO_PRIMARY_MODULE_FUNCTION);
+    GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P3, GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);
     FlashCtl_setWaitState(FLASH_BANK0, 2);
     FlashCtl_setWaitState(FLASH_BANK1, 2);
     PCM_setCoreVoltageLevel(PCM_VCORE1);
@@ -93,8 +73,7 @@ void _graphicsInit()
     Crystalfontz128x128_SetOrientation(LCD_ORIENTATION_UP);
 
     /* Initializes graphics context */
-    Graphics_initContext(&g_sContext, &g_sCrystalfontz128x128,
-                         &g_sCrystalfontz128x128_funcs);
+    Graphics_initContext(&g_sContext, &g_sCrystalfontz128x128, &g_sCrystalfontz128x128_funcs);
     Graphics_setForegroundColor(&g_sContext, 0xFF0000);
     Graphics_setBackgroundColor(&g_sContext, 0xFFFFFF);
     GrContextFontSet(&g_sContext, &g_sFontFixed6x8);
@@ -106,26 +85,19 @@ void _graphicsInit()
 void _adcInit()
 {
     /* Configures Pin 6.0 and 4.4 as ADC input */
-    GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN0,
-    GPIO_TERTIARY_MODULE_FUNCTION);
-    GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN4,
-    GPIO_TERTIARY_MODULE_FUNCTION);
+    GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN0, GPIO_TERTIARY_MODULE_FUNCTION);
+    GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN4, GPIO_TERTIARY_MODULE_FUNCTION);
 
     /* Initializing ADC (ADCOSC/64/8) */
     ADC14_enableModule();
-    ADC14_initModule(ADC_CLOCKSOURCE_ADCOSC, ADC_PREDIVIDER_64, ADC_DIVIDER_8,
-                     0);
+    ADC14_initModule(ADC_CLOCKSOURCE_ADCOSC, ADC_PREDIVIDER_64, ADC_DIVIDER_8, 0);
 
     /* Configuring ADC Memory (ADC_MEM0 - ADC_MEM1 (A15, A9)  with repeat)
      * with internal 2.5v reference */
     ADC14_configureMultiSequenceMode(ADC_MEM0, ADC_MEM1, true);
-    ADC14_configureConversionMemory(ADC_MEM0, ADC_VREFPOS_AVCC_VREFNEG_VSS,
-    ADC_INPUT_A15,
-                                    ADC_NONDIFFERENTIAL_INPUTS);
+    ADC14_configureConversionMemory(ADC_MEM0, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A15, ADC_NONDIFFERENTIAL_INPUTS);
 
-    ADC14_configureConversionMemory(ADC_MEM1, ADC_VREFPOS_AVCC_VREFNEG_VSS,
-    ADC_INPUT_A9,
-                                    ADC_NONDIFFERENTIAL_INPUTS);
+    ADC14_configureConversionMemory(ADC_MEM1, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A9, ADC_NONDIFFERENTIAL_INPUTS);
 
     /* Enabling the interrupt when a conversion on channel 1 (end of sequence)
      *  is complete and enabling conversions */
@@ -167,33 +139,6 @@ void _clocksInit()
 
 int _connectionInit()
 {
-    //sendUART("ready.");
-
-    while (0 /* receiving data */)
-        while (!gotInfo)
-        {
-            /* receive data */
-        }
-
-    playing = 1;
-    Interrupt_enableInterrupt(INT_TA0_N);
-
-    Graphics_clearDisplay(&g_sContext);
-    _graphics();
-    //Graphics_clearDisplay(&g_sContext);
-    //_graphics();
-
-    // Turn off red and blue LEDs
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
-    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
-    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
-    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
-
-    // Turn on green LED
-    GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
-    //GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
-
-    return 0;
 }
 
 void _hwInit()
@@ -227,5 +172,5 @@ void _hwInit()
     _adcInit();
     _UARTInit();
     _clocksInit();
-    _connectionInit();
+    //_connectionInit();
 }

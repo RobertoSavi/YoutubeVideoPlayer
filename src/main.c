@@ -11,6 +11,8 @@ int main()
 {
     _hwInit();
 
+    timeMax = atoi(duration); // Convert string to integer
+
     //_graphics();
 
     if(0)

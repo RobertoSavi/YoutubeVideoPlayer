@@ -337,3 +337,23 @@ void TA1_N_IRQHandler()
     Interrupt_enableInterrupt(INT_PORT4);
     Interrupt_enableInterrupt(INT_PORT3);
 }
+
+void TA2_N_IRQHandler()
+{
+    Timer_A_clearInterruptFlag(TIMER_A2_BASE);
+
+    if (titlePos>0)
+    {
+        titlePos -= 10;
+    }
+    else
+    {
+        titlePos = 134;
+    }
+
+    if(!menuOpen)
+    {
+        Graphics_drawStringCentered(&g_sContext, " ", 300, titlePos, 45, FONT_FMT_UNCOMPRESSED);
+        _graphics();
+    }
+}

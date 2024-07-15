@@ -22,6 +22,7 @@ int main()
 
     while(1)
     {
-        PCM_gotoLPM0();
+        Interrupt_enableSleepOnIsrExit();
+        PCM_gotoLPM0InterruptSafe();
     }
 }

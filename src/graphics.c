@@ -25,7 +25,7 @@ void _graphics()
 
     Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 15, 64, 70, OPAQUE_TEXT);
     Graphics_drawStringCentered(&g_sContext, (int8_t*) string[1], 15, 64, 80, OPAQUE_TEXT);
-    Graphics_drawStringCentered(&g_sContext, (int8_t*) string[2], 15, 64, 45, FONT_FMT_UNCOMPRESSED);
+    Graphics_drawStringCentered(&g_sContext, (int8_t*) string[2], AUTO_STRING_LENGTH, titlePos, 45, FONT_FMT_UNCOMPRESSED);
 
     showProgressBar();
 

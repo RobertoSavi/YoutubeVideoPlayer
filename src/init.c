@@ -121,10 +121,12 @@ void _clocksInit()
     /* Configuring Continuous Mode */
     Timer_A_configureContinuousMode(TIMER_A0_BASE, &contSecond);
     Timer_A_configureContinuousMode(TIMER_A1_BASE, &contFast);
+    Timer_A_configureContinuousMode(TIMER_A2_BASE, &contSecond);
 
     /* Enabling interrupts and going to sleep */
     Interrupt_enableSleepOnIsrExit();
     Interrupt_enableInterrupt(INT_TA1_N);
+    Interrupt_enableInterrupt(INT_TA2_N);
 
     /* Enabling MASTER interrupts */
     Interrupt_enableMaster();
@@ -132,6 +134,7 @@ void _clocksInit()
     /* Starting the Timer_A0 in continuous mode */
     Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_CONTINUOUS_MODE);
     Timer_A_startCounter(TIMER_A1_BASE, TIMER_A_CONTINUOUS_MODE);
+    Timer_A_startCounter(TIMER_A2_BASE, TIMER_A_CONTINUOUS_MODE);
 }
 
 int _connectionInit()

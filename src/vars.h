@@ -5,26 +5,27 @@
 #define GREEN_LED_PIN GPIO_PIN1
 #define BLUE_LED_PIN GPIO_PIN2
 
-extern volatile int time;
-extern volatile int timeMax;
-extern volatile uint16_t volume;
-extern volatile uint8_t volumeDelay;
-extern volatile uint16_t volumeMute;
-extern volatile uint8_t mute;
-extern volatile uint8_t timeDelay;
-extern volatile uint8_t playing;
-extern volatile uint8_t menuOpen;
-extern volatile uint8_t menuSelect;
+extern int time;
+extern int timeMax;
+extern uint16_t volume;
+extern uint8_t volumeDelay;
+extern uint16_t volumeMute;
+extern uint8_t mute;
+extern uint8_t timeDelay;
+extern uint8_t playing;
+extern uint8_t menuOpen;
+extern uint8_t menuSelect;
+extern uint8_t titlePos;
 
-extern volatile uint8_t TXData;
-extern volatile uint8_t RXData;
-extern volatile char receiveData[50];
+extern uint8_t TXData;
+extern uint8_t RXData;
+extern char receiveData[50];
 extern uint8_t duration[10];
 extern uint8_t title[100];
-extern volatile uint8_t count;
-extern volatile uint8_t ack;
-extern volatile bool durationReceived;
-extern volatile bool gotInfo;
+extern uint8_t count;
+extern uint8_t ack;
+extern bool durationReceived;
+extern bool gotInfo;
 
 extern const uint8_t posBarraX;
 extern const uint8_t posBarraY;
@@ -41,7 +42,7 @@ extern const Graphics_Image pauseIMG;
 extern const uint8_t playBitmap[];
 extern const Graphics_Image playIMG;
 
-extern char string[10][30];
+extern char string[10][100];
 
 extern Graphics_Context g_sContext;
 

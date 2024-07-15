@@ -9,7 +9,6 @@
 
 void _menuFunc(uint8_t menuS)
 {
-    //Call the function of the selected menu option
     switch(menuS)
     {
         case 0:
@@ -40,7 +39,6 @@ void _menuFunc(uint8_t menuS)
 
 void previousVideo()
 {
-    //Send the command to go to the previous video and stop the video
     char str[7]="prev.";
     sendUART(str);
     playing=0;
@@ -55,7 +53,6 @@ void previousVideo()
 
 void nextVideo()
 {
-    //Send the command to go to the next video and stop the video
     char str[7]="next.";
     sendUART(str);
     playing=0;
@@ -70,14 +67,12 @@ void nextVideo()
 
 void lowerSpeed()
 {
-    //Send the comment to lower the playback speed
     char str[7]="lSpee.";
     sendUART(str);
 }
 
 void higherSpeed()
 {
-    //Send the comment to increase the playback speed
     char str[7]="hSpee.";
     sendUART(str);
 }

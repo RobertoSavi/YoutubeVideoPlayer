@@ -150,11 +150,9 @@ The server we are connecting to and sending messages through the `ESP32` is prov
 It can also be run on local, by installing [Node.js](https://nodejs.org/) and ws and running the index.js file
 
 ```
-
 npm install ws
 cd Webserver
 node index.js
-
 ```
 
 ## Features

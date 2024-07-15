@@ -11,25 +11,6 @@
   body {
     font-size: 16px;
   }
-  .websocket {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    font-size: 3vw;
-  }
-  .websocket button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    height: 10vh;
-    width: 10vw;
-    font-size: 2vw;
-  }
-  .websocket .label {
-    margin-left: auto;
-  }
   .titolo {
     font-size: 5vw;
     color: red;
@@ -77,17 +58,15 @@
 
   <script>
 
-    var wsm_max_len = 4096;
-    var lista = [];
-    var url;
-    var ws;
-
-    var video;
-    var player;
+    var lista = []; //variable to save the commands sent by the MSP432
+    var url;        //variable to save the url inserted by the user
+    var ws;         //variable of the websocket
+    var video;      //variable to check if the user inserted a video or a playlist url
+    var player;     //variable of the iframe
 
     // This function creates an <iframe> (and YouTube player) after the API cod>
     function onYouTubeIframeAPIReady() {
-      if(video == "playlist"){
+      if(video == "playlist"){          //if the url inserted is a playlist of videos, it creates a playlist object
         player = new YT.Player('player', {
           height: '720',
           width: '1280',
@@ -99,7 +78,7 @@
             'onReady': onPlayerReady,
           }
         });
-      }else if (video == "video"){
+      }else if (video == "video"){        //if the url inserted is a single video, it creates a video object
         player = new YT.Player('player', {
           height: '720',
           width: '1280',
@@ -110,8 +89,8 @@
         });
       }
 
-      ws = new WebSocket(`ws://16.171.133.32:3000`);
-      ws.onmessage = ws_onmessage;
+      ws = new WebSocket(`ws://16.171.133.32:3000`); //connecting to the websocket comunicating with index.js
+      ws.onmessage = ws_onmessage; //every time a message arrives, the function ws_onmessage is called
     }
 
 
@@ -135,7 +114,6 @@
     // When a message arrives through the websocket, it is pushed into the list
     function ws_onmessage(e_msg) {
       lista.push(e_msg);
-      console.log(e_msg);
     }
 
     //Functions to control the player variable
@@ -144,7 +122,7 @@
       if (actual_volume < 0){
         actual_volume = 0;
         }
-      player.setVolume(actual_volume);
+      player.setVolume(actual_volume); //send command to the iframe player
     }
 
     function higherVolume(actual_volume){
@@ -190,6 +168,7 @@
       }
     }
 
+    //when this function is called, it reads the message arrived and calls the right function declared before
     function switch_case(msg){
       switch(msg.data){
         case "volDown":
@@ -226,18 +205,18 @@
                   
         case "prev":
           player.previousVideo();
-          setTimeout(sendVideoInfo, 2000);
+          setTimeout(sendVideoInfo, 2000); //when I go to previous video, I also send the informations of the new video
           break;
 
         case "next":
           player.nextVideo();
-          setTimeout(sendVideoInfo, 2000);
+          setTimeout(sendVideoInfo, 2000); //when I go to next video, I also send the informations of the new video
           break;
 
         case "lSpee":
           lowerSpeed(player.getPlaybackRate());
           break;
-        
+
         case "hSpee":
           higherSpeed(player.getPlaybackRate());
           break;
@@ -252,17 +231,22 @@
       }
     }, 250);
 
-    // Function to save user input into variable and create iframe player with url
-    document.getElementById('myForm').addEventListener('submit',
+    // Function to save user input into url variable and create iframe player
+    document.getElementById('myForm').addEventListener('submit', //when a url is submitted (the user press search)
       function(event) {
-        event.preventDefault();
-        var userInput = document.getElementById('userInput').value;
-        url = userInput.split('=')[2];
-        if (url == undefined){
-          video = "video";
-          url = userInput.split('=')[1];
+        event.preventDefault(); //if the event does not get explicitly handled, its default action should not be taken
+        var userInput = document.getElementById('userInput').value; //save the user input into a variable
+
+        //example of video url: https://www.youtube.com/watch?v=92uY0wZmTbY
+        //example of playlist url: https://www.youtube.com/watch?v=OEVlttN2kng&list=PLpkXLf6Zhdx1myEYbwHWdAgqKjjkXX1Aj
+        //as we can see, the id we need to create the iframe is the final part of our url 
+        //(video: 92uY0wZmTbY, playlist: PLpkXLf6Zhdx1myEYbwHWdAgqKjjkXX1Aj)
+        url = userInput.split('=')[2];    //takes the string after the second '=' character
+        if (url == undefined){            //if undefined (so it is a video url)
+          video = "video";                //variable to know it is a video url
+          url = userInput.split('=')[1];  //saves the url part after the first '=' character
         }else{
-          video = "playlist";
+          video = "playlist";             // variable to know it is a playlist url
         }
         // This code loads the IFrame Player API code asynchronously.
         var tag = document.createElement('script');

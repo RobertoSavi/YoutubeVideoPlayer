@@ -9,41 +9,41 @@
 
 void _menuFunc(uint8_t menuS)
 {
-    switch(menuS)
+    switch (menuS)
     {
-        case 0:
-        {
-            previousVideo();
-            break;
-        }
+    case 0:
+    {
+        previousVideo();
+        break;
+    }
 
-        case 1:
-        {
-            nextVideo();
-            break;
-        }
+    case 1:
+    {
+        nextVideo();
+        break;
+    }
 
-        case 2:
-        {
-            lowerSpeed();
-            break;
-        }
+    case 2:
+    {
+        lowerSpeed();
+        break;
+    }
 
-        case 3:
-        {
-            higherSpeed();
-            break;
-        }
+    case 3:
+    {
+        higherSpeed();
+        break;
+    }
     }
 }
 
 void previousVideo()
 {
-    char str[7]="prev.";
+    char str[7] = "prev.";
     sendUART(str);
-    playing=0;
-    time=0;
-    gotInfo=false;
+    playing = 0;
+    time = 0;
+    gotInfo = false;
 
     // Turn on red LED
     GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
@@ -53,11 +53,11 @@ void previousVideo()
 
 void nextVideo()
 {
-    char str[7]="next.";
+    char str[7] = "next.";
     sendUART(str);
-    playing=0;
-    time=0;
-    gotInfo=false;
+    playing = 0;
+    time = 0;
+    gotInfo = false;
 
     // Turn on red LED
     GPIO_setOutputLowOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
@@ -67,12 +67,22 @@ void nextVideo()
 
 void lowerSpeed()
 {
-    char str[7]="lSpee.";
-    sendUART(str);
+    char str[7] = "lSpee.";
+    if (speed > 25)
+    {
+        speed -= 25;
+        updateTimerForPlaybackSpeed(speed);
+        sendUART(str);
+    }
 }
 
 void higherSpeed()
 {
-    char str[7]="hSpee.";
-    sendUART(str);
+    char str[7] = "hSpee.";
+    if (speed < 200)
+    {
+        speed += 25;
+        updateTimerForPlaybackSpeed(speed);
+        sendUART(str);
+    }
 }

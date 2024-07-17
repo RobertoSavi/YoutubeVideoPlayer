@@ -2,6 +2,7 @@
 #define __HANDLERS_H__
 
 void sendUART(char* str);
+void updateTimerForPlaybackSpeed(uint8_t speed);
 void ADC14_IRQHandler();
 void PORT4_IRQHandler();
 void PORT5_IRQHandler();

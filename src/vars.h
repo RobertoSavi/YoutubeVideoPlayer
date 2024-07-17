@@ -26,6 +26,7 @@ extern uint8_t count;
 extern uint8_t ack;
 extern bool durationReceived;
 extern bool gotInfo;
+extern uint8_t speed;
 
 extern const uint8_t posBarraX;
 extern const uint8_t posBarraY;

@@ -139,6 +139,33 @@ void _clocksInit()
 
 int _connectionInit()
 {
+    //sendUART("ready.");
+
+    while (0 /* receiving data */)
+        while (!gotInfo)
+        {
+            /* receive data */
+        }
+
+    playing = 1;
+    Interrupt_enableInterrupt(INT_TA0_N);
+
+    Graphics_clearDisplay(&g_sContext);
+    _graphics();
+    //Graphics_clearDisplay(&g_sContext);
+    //_graphics();
+
+    // Turn off red and blue LEDs
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, RED_LED_PIN);
+    //GPIO_setOutputLowOnPin(GPIO_PORT_P2, BLUE_LED_PIN);
+
+    // Turn on green LED
+    GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
+    //GPIO_setOutputHighOnPin(GPIO_PORT_P2, GREEN_LED_PIN);
+
+    return 0;
 }
 
 void _hwInit()

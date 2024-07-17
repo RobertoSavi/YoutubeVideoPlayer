@@ -21,6 +21,55 @@ void sendUART(char *str)
     }
 }
 
+void updateTimerForPlaybackSpeed(uint8_t speed) {
+    uint16_t divider;
+
+    // Determine the clock divider based on the speed
+    switch ((int)(speed)) {
+        case 25:  // 0.25x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_8;
+            break;
+        case 50:  // 0.50x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_4;
+            break;
+        case 75:  // 0.75x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_3;
+            break;
+        case 100: // 1.00x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_2;
+            break;
+        case 125: // 1.25x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
+            break;
+        case 150: // 1.50x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
+            break;
+        case 175: // 1.75x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
+            break;
+        case 200: // 2.00x speed
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
+            break;
+        default:
+            divider = TIMER_A_CLOCKSOURCE_DIVIDER_2; // Default to normal speed
+    }
+
+    // Update timer configuration with the new divider
+    const Timer_A_ContinuousModeConfig contConfig = {
+        TIMER_A_CLOCKSOURCE_ACLK,           // ACLK Clock Source
+        divider,                            // Use the calculated divider
+        TIMER_A_TAIE_INTERRUPT_ENABLE,      // Enable Overflow ISR
+        TIMER_A_DO_CLEAR
+    };
+
+    // Reconfigure Continuous Mode for all timers
+    Timer_A_configureContinuousMode(TIMER_A0_BASE, &contConfig);
+
+    // Restart the timers
+    Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_CONTINUOUS_MODE);
+}
+
+
 /* This interrupt is fired whenever a conversion is completed and placed in
  * ADC_MEM1. This signals the end of conversion and the results array is
  * grabbed and placed in resultsBuffer */
@@ -236,17 +285,17 @@ void PORT3_IRQHandler()
 }
 
 /*uint16_t myAtoi(const char* str) {
-    int result = 0;
-    int i = 0;
+ int result = 0;
+ int i = 0;
 
-    // Process digits
-    while (str[i] >= '0' && str[i] <= '9') {
-        result = result * 10 + (str[i] - '0');
-        i++;
-    }
+ // Process digits
+ while (str[i] >= '0' && str[i] <= '9') {
+ result = result * 10 + (str[i] - '0');
+ i++;
+ }
 
-    return result;
-}*/
+ return result;
+ }*/
 
 void EUSCIA2_IRQHandler(void)
 {
@@ -268,11 +317,11 @@ void EUSCIA2_IRQHandler(void)
             }
             count++;
             /*ack--;
-            if (ack == 0)
-            {
-                UART_transmitData(EUSCI_A2_BASE, '%');
-                ack = 1;
-            }*/
+             if (ack == 0)
+             {
+             UART_transmitData(EUSCI_A2_BASE, '%');
+             ack = 1;
+             }*/
         }
         else
         {
@@ -290,7 +339,7 @@ void EUSCIA2_IRQHandler(void)
                 durationReceived = false;
                 Graphics_clearDisplay(&g_sContext);
                 _graphics();
-                playing=1;
+                playing = 1;
                 Interrupt_enableInterrupt(INT_TA0_N);
 
                 // Turn on blue LED for debug
@@ -315,8 +364,19 @@ void TA0_N_IRQHandler()
         if (!menuOpen)
         {
             showProgressBar();
-            sprintf(string[0], "Time: %3d/%3d", time, timeMax);
-            Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 15, 64, 70, OPAQUE_TEXT);
+            int timeMinutes = time / 60;
+            int timeSeconds = time % 60;
+            int timeMaxMinutes = timeMax / 60;
+            int timeMaxSeconds = timeMax % 60;
+            tRectangle whiteBar = { 0, 65, 130, 75 };
+            GrContextForegroundSet(&g_sContext, 0xffffff);
+            GrRectFill(&g_sContext, &whiteBar);
+            GrContextForegroundSet(&g_sContext, 0xff0000);
+
+            sprintf(string[0], "Time: %02d:%02d/%02d:%02d", timeMinutes,
+                    timeSeconds, timeMaxMinutes, timeMaxSeconds);
+            Graphics_drawStringCentered(&g_sContext, (int8_t*) string[0], 30,
+                                        64, 70, OPAQUE_TEXT);
         }
 
         if (time == timeMax)
@@ -342,7 +402,7 @@ void TA2_N_IRQHandler()
 {
     Timer_A_clearInterruptFlag(TIMER_A2_BASE);
 
-    if (titlePos>0)
+    if (titlePos > 0)
     {
         titlePos -= 10;
     }
@@ -351,7 +411,7 @@ void TA2_N_IRQHandler()
         titlePos = 134;
     }
 
-    if(!menuOpen)
+    if (!menuOpen)
     {
         _titleGraphics();
     }

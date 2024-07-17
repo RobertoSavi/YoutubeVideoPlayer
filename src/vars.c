@@ -15,17 +15,18 @@ uint8_t timeDelay = 0;
 uint8_t playing = 0;
 uint8_t menuOpen = 0;
 uint8_t menuSelect = 0;
-uint8_t titlePos=64;
+uint8_t titlePos = 64;
 
 uint8_t TXData = 1;
 uint8_t RXData = 0;
 char receiveData[50];
-uint8_t duration[10] = "432";
-uint8_t title[100] = "On the other hand, we denounce with righteous indignation and dislike men who";
+uint8_t duration[10] = "";
+uint8_t title[100] = "";
 uint8_t count = 0;
 uint8_t ack = 1;
 bool durationReceived = false;
 bool gotInfo = false;
+uint8_t speed = 100;
 
 const uint8_t posBarraX = 29;
 const uint8_t posBarraY = 113;

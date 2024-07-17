@@ -190,8 +190,9 @@ node index.js
 
 ### Lorenzo Midiri
 
-- MSP graphics
-- MSP handlers
+- MSP boosterpack cofiguration
+- Boosterpack handlers
+- Boosterpack graphics
 
 ## Contacts
 

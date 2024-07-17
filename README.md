@@ -17,6 +17,7 @@
     - [ESP32](#esp32)
 - [Webserver](#webserver)
 - [Features](#features)
+- [Video demo](#videodemo)
 - [Contributors](#contributors)
 - [Contacts](#contacts)
 

@@ -169,6 +169,10 @@ node index.js
 - Go to the next video
 - Go to the previous video
 
+## Video demo
+
+- https://youtu.be/HrJpqbh6aiE?si=nRPD8CwrQ7cvku2H
+
 ## Contributors
 
 ### Roberto Savi

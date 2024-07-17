@@ -190,6 +190,9 @@ node index.js
 
 ### Lorenzo Midiri
 
+-MSP graphics
+-MSP handlers
+
 ## Contacts
 
 - Roberto Savi [roberto.savi@studenti.unitn.it]
